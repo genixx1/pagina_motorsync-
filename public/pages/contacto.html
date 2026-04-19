@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Contacto — MOTORSYNC</title>
+  <link rel="icon" href="/images/logo-v.png"/>
+  <link rel="stylesheet" href="/css/main.css"/>
+  <link rel="stylesheet" href="/css/pages.css"/>
+</head>
+<body class="page">
+
+  <div class="page-hero">
+    <div class="page-hero__bg"></div>
+    <div class="page-hero__grid"></div>
+    <div class="container">
+      <div class="page-hero__content">
+        <div class="page-hero__breadcrumb">
+          <a href="/index.html">Inicio</a> › <span>Contacto</span>
+        </div>
+        <h1 class="page-hero__title">
+          CONTÁC<span style="color:var(--r)">TANOS</span>
+        </h1>
+        <p class="page-hero__sub">
+          ¿Tienes preguntas? Estamos aquí para ayudarte a elegir el plan perfecto para tu vehículo.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CONTACT CONTENT ══ -->
+  <section class="section">
+    <div class="container">
+      <div class="contact-page-grid">
+
+        <!-- INFO COLUMN -->
+        <div>
+          <div class="reveal">
+            <span class="eyebrow">Información de contacto</span>
+            <h2 class="heading">ESTAMOS <span class="heading--ghost">AQUÍ</span></h2>
+            <p class="subtext">Respuesta en menos de 24 horas. Por WhatsApp te atendemos al instante.</p>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:36px">
+            <div class="contact-item reveal">
+              <div class="contact-item__icon">💬</div>
+              <div>
+                <div class="contact-item__label">WhatsApp (recomendado)</div>
+                <div class="contact-item__value">
+                  <a href="https://api.whatsapp.com/send?phone=51992198342" target="_blank">+51 992 198 342</a>
+                </div>
+              </div>
+            </div>
+            <div class="contact-item reveal">
+              <div class="contact-item__icon">📍</div>
+              <div>
+                <div class="contact-item__label">Dirección</div>
+                <div class="contact-item__value">Av. Cesar Vallejo Sector 2, Grupo 5<br>Mz. H Lt. 11, Villa El Salvador, Lima</div>
+              </div>
+            </div>
+            <div class="contact-item reveal">
+              <div class="contact-item__icon">⏰</div>
+              <div>
+                <div class="contact-item__label">Horario de atención</div>
+                <div class="contact-item__value">Lunes a Sábado: 9:00am – 7:00pm<br>Domingo: 10:00am – 2:00pm</div>
+              </div>
+            </div>
+            <div class="contact-item reveal">
+              <div class="contact-item__icon">📱</div>
+              <div>
+                <div class="contact-item__label">Redes Sociales</div>
+                <div class="contact-item__value">
+                  <a href="https://www.facebook.com/NovotracePeru" target="_blank">Facebook</a> &nbsp;·&nbsp;
+                  <a href="https://www.instagram.com/novotrace" target="_blank">Instagram</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-map reveal">
+            <span>📍</span>
+            <p>Villa El Salvador, Lima, Perú</p>
+          </div>
+        </div>
+
+        <!-- FORM COLUMN -->
+        <div class="reveal">
+          <h3 style="font-family:var(--fd);font-size:30px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:28px">
+            Solicita una <span style="color:var(--r)">Cotización</span>
+          </h3>
+          <form id="contactForm">
+            <div class="form-group">
+              <label>Nombre completo</label>
+              <input type="text" name="nombre" placeholder="Tu nombre completo" required/>
+            </div>
+            <div class="form-group">
+              <label>WhatsApp / Teléfono</label>
+              <input type="text" name="tel" placeholder="+51 9XX XXX XXX" required/>
+            </div>
+            <div class="form-group">
+              <label>Correo electrónico</label>
+              <input type="email" name="email" placeholder="tu@email.com"/>
+            </div>
+            <div class="form-group">
+              <label>Plan de interés</label>
+              <select name="plan">
+                <option value="">Selecciona un plan...</option>
+                <option>Plan Básico</option>
+                <option>Plan Premium</option>
+                <option>Plan DVR</option>
+                <option>Autoradio / Confort</option>
+                <option>No sé, quiero asesoría</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Marca y modelo de tu vehículo</label>
+              <input type="text" name="vehiculo" placeholder="Ej: Toyota Corolla 2020"/>
+            </div>
+            <div class="form-group">
+              <label>Mensaje</label>
+              <textarea name="mensaje" placeholder="Cuéntanos qué necesitas y te ayudamos a elegir el plan perfecto..."></textarea>
+            </div>
+            <button type="submit" class="btn btn--red btn--full">Enviar consulta →</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script src="/js/navbar.js"></script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/chat.js"></script>
+  <script>
+    const form = document.getElementById('contactForm');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('button[type="submit"]');
+        const orig = btn.textContent; btn.textContent = 'Enviando...'; btn.disabled = true;
+        try {
+          const r = await fetch('/api/contacto', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              nombre: form.nombre?.value, tel: form.tel?.value,
+              email: form.email?.value, plan: form.plan?.value,
+              vehiculo: form.vehiculo?.value, mensaje: form.mensaje?.value,
+            })
+          });
+          const d = await r.json();
+          if (d.success) { showToast('¡Mensaje enviado! Te contactamos pronto 🚗'); form.reset(); }
+        } catch { showToast('Error al enviar. Usa WhatsApp directamente.', 'error'); }
+        btn.textContent = orig; btn.disabled = false;
+      });
+    }
+  </script>
+</body>
+</html>
